@@ -3,6 +3,9 @@ function getRandom (min, max) {
     throw new Error('Диапазон включает только положительные числа. Число "от" не может быть больше числа "до".');
   }
 
+  min = Math.ceil(min);
+  max = Math.floor(max);
+
   const random = min + Math.random() * (max - min + 1);
   return Math.floor(random);
 }
@@ -24,7 +27,7 @@ function getRandomPoint (min, max, n) {
   }
 
   const decimalPoint = Math.pow(10, n);
-  const random = min + Math.random() * (max - min + 1) ;
+  const random = +((min + Math.random() * (max - min)).toFixed(n)) ;
   return Math.floor((random) * decimalPoint) / decimalPoint ;
 }
 
