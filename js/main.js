@@ -33,7 +33,7 @@ function getRandomPoint (min, max, n) {
 
 getRandomPoint(1.2, 5.7, 2);
 
-const getIimageNumber = () => {
+const getImageNumber = () => {
   const number = getRandom (1, 10);
 
   if (number < 10) {
@@ -42,11 +42,11 @@ const getIimageNumber = () => {
   return `user${number}`;
 };
 
-const AUTHOR = () => ({
-  avatar: `img/avatars/${getIimageNumber()}.png`,
+const getAuthor = () => ({
+  avatar: `img/avatars/${getImageNumber()}.png`,
 });
 
-const TITLE = () => `Предложение №${getRandom (1, 10)}`;
+const getTitle = () => `Предложение №${getRandom (1, 10)}`;
 
 const PRICE = {
   min: 1000,
@@ -94,14 +94,14 @@ const getRandomArrayElement = (elements) => elements[getRandom(0, elements.lengt
 
 const getShuffleArray = (array) => array.sort(() => Math.random() - 0.5).slice(Math.floor(Math.random()*array.length));
 
-const LOCATION = () => ({
+const getLocation = () => ({
   lat: getRandomPoint(35.65000, 35.70000, 5),
   lng: getRandomPoint(139.70000, 139.80000, 5),
 });
 
-const OFFER = () => ({
-  title: TITLE(),
-  adress: `${LOCATION.lat} , ${LOCATION.lng}`,
+const getOffer = () => ({
+  title: getTitle(),
+  adress: `${getLocation.lat} , ${getLocation.lng}`,
   price: getRandom(PRICE.min, PRICE.max),
   type: getRandomArrayElement(TYPE),
   rooms: getRandom(1, 4),
@@ -113,7 +113,11 @@ const OFFER = () => ({
   photos: getShuffleArray(PHOTOS),
 });
 
-const createNewArray = () => [AUTHOR(), OFFER(), LOCATION()];
+const createNewArray = () => ({
+  autor: getAuthor(),
+  offer: getOffer(),
+  location: getLocation(),
+});
 
 const getNewArray = new Array(10).fill(null).map(() => createNewArray());
 
