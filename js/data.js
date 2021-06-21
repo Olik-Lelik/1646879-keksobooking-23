@@ -63,7 +63,7 @@ const createOffer = () => {
     },
     offer: {
       title: getTitle(),
-      adress: `${CURRENT_LOCATION.lat}, ${CURRENT_LOCATION.lng}`,
+      address: `${CURRENT_LOCATION.lat}, ${CURRENT_LOCATION.lng}`,
       price: getRandom(PRICE.MIN, PRICE.MAX),
       type: getRandomArrayElement(TYPE_HOUSING),
       rooms: getRandom(1, 4),

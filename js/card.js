@@ -10,30 +10,32 @@ const createFeatures = (path, items) => {
 
   items.forEach((item) => {
     const element = document.createElement('li');
-    element.classList.add(`popup__features--${item}`);
-    path.appendChild(element);
-  });
-
-  path.appendChild(fragment);
-
-  if (!items.lengt) {
-    path.classList.add('hidden');
-  }
-};
-
-const createPhotos = (path, items) => {
-  path.innerHTML = '';
-  const fragment = document.createDocumentFragment();
-
-  items.forEach((item) => {
-    const element = path.cloneNode(true);
-    element.src = `${item}`;
+    element.classList.add('popup__feature');
+    element.classList.add(`popup__feature--${item}`);
     fragment.appendChild(element);
   });
 
   path.appendChild(fragment);
 
-  if (!items.lengt) {
+  if (items.lengt === 0) {
+    path.classList.add('hidden');
+  }
+};
+
+const createPhotos = (path, items) => {
+  const fragment = document.createDocumentFragment();
+
+  items.forEach((item) => {
+    const element = path.querySelector('.popup__photo').cloneNode(true);
+    element.src = item;
+    fragment.appendChild(element);
+  });
+
+  path.innerHTML = '';
+
+  path.appendChild(fragment);
+
+  if (items.lengt === 0) {
     path.classList.add('hidden');
   }
 };
@@ -41,22 +43,22 @@ const createPhotos = (path, items) => {
 const getListAds = (array) => {
   const adsFragment = document.createDocumentFragment();
 
-  array.forEach( ({autor, offer}) => {
+  array.forEach( (element) => {
     const cardElemet = cardTemplate.cloneNode(true);
 
-    cardElemet.querySelector('.popup__avatar').src = autor.avatar;
+    cardElemet.querySelector('.popup__avatar').src = element.autor.avatar;
 
-    cardElemet.querySelector('.popup__title').textContent = offer.title;
-    cardElemet.querySelector('.popup__text--address').textContent = offer.address;
-    cardElemet.querySelector('.popup__text--price').textContent = `${offer.price}₽/ночь`;
-    cardElemet.querySelector('.popup__type').textContent = TYPE_HOUSING[offer.type];
-    cardElemet.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guests} гостей`;
-    cardElemet.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}.`;
-    createFeatures(cardElemet.querySelector('.popup__features'), offer.features);
-    cardElemet.querySelector('.popup__description').textContent = offer.description;
-    createPhotos(cardElemet.querySelector('.popup__photos'), offer.photos);
+    cardElemet.querySelector('.popup__title').textContent = element.offer.title;
+    cardElemet.querySelector('.popup__text--address').textContent = element.offer.address;
+    cardElemet.querySelector('.popup__text--price').textContent = `${element.offer.price}₽/ночь`;
+    cardElemet.querySelector('.popup__type').textContent = TYPE_HOUSING[element.offer.type];
+    cardElemet.querySelector('.popup__text--capacity').textContent = `${element.offer.rooms} комнаты для ${element.offer.guests} гостей`;
+    cardElemet.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}.`;
+    createFeatures(cardElemet.querySelector('.popup__features'), element.offer.features);
+    cardElemet.querySelector('.popup__description').textContent = element.offer.description;
+    createPhotos(cardElemet.querySelector('.popup__photos'), element.offer.photos);
 
-    if (offer.description.lengt === 0) {
+    if (element.offer.description.lengt === 0) {
       cardElemet.querySelector('.popup__description')
         .classList.add('hidden');
     }
