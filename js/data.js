@@ -1,16 +1,27 @@
+import {getRandom, getRandomArrayElement, getShuffleArray, getImageNumber, getLocation} from './util.js';
 
 const PRICE = {
-  min: 1000,
-  max: 50000,
+  MIN: 1000,
+  MAX: 50000,
 };
 
-const TYPE = [
-  'palace',
-  'flat',
-  'house',
-  'bungalow',
-  'hotel',
-];
+const LAT = {
+  MIN: 35.65000,
+  MAX: 35.70000,
+};
+
+const LNG = {
+  MIN: 139.70000,
+  MAX: 139.80000,
+};
+
+const TYPE_HOUSING = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
+  hotel: 'Отель',
+};
 
 const CHECKIN = [
   '12:00',
@@ -39,82 +50,33 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-function getRandom (min, max) {
-  if (min >= max || min < 0 || max <= 0) {
-    throw new Error('Диапазон включает только положительные числа. Число "от" не может быть больше числа "до".');
-  }
-
-  min = Math.ceil(min);
-  max = Math.floor(max);
-
-  const random = min + Math.random() * (max - min + 1);
-  return Math.floor(random);
-}
-
-function getRandomPoint (min, max, n) {
-  if (min >= max || min < 0 || max <= 0) {
-    throw new Error('Диапазон включает только положительные числа. Число "от" не может быть больше числа "до".');
-  }
-
-  if (n < 0) {
-    throw new Error('Значение должно быть больше или равно 0');
-  }
-
-  if ((n ^ 0) !== n) {
-    throw new Error('Значение должно быть целым числом');
-  }
-
-  const decimalPoint = Math.pow(10, n);
-  const random = +((min + Math.random() * (max - min)).toFixed(n)) ;
-  return Math.floor((random) * decimalPoint) / decimalPoint ;
-}
-
-const getRandomArrayElement = (elements) => elements[getRandom(0, elements.length - 1)];
-
-const getShuffleArray = (array) => array.sort(() => Math.random() - 0.5).slice(Math.floor(Math.random()*array.length));
-
-const getImageNumber = () => {
-  const number = getRandom (1, 10);
-
-  if (number < 10) {
-    return `user0${number}`;
-  }
-  return `user${number}`;
-};
-
-const getAuthor = () => ({
-  avatar: `img/avatars/${getImageNumber()}.png`,
-});
-
 const getTitle = () => `Предложение №${getRandom (1, 10)}`;
 
 const getDescription = () => `Описание №${getRandom (1, 10)}`;
 
-const getLocation = () => ({
-  lat: getRandomPoint(35.65000, 35.70000, 5),
-  lng: getRandomPoint(139.70000, 139.80000, 5),
-});
+const createOffer = () => {
+  const CURRENT_LOCATION = getLocation(LAT, LNG);
 
-const getOffer = () => ({
-  title: getTitle(),
-  adress: `${getLocation().lat} , ${getLocation().lng}`,
-  price: getRandom(PRICE.min, PRICE.max),
-  type: getRandomArrayElement(TYPE),
-  rooms: getRandom(1, 4),
-  guests: getRandom(1, 10),
-  checkin: getRandomArrayElement(CHECKIN),
-  checkout: getRandomArrayElement(CHECKOUT),
-  features: getShuffleArray(FEATURES),
-  description: getDescription(),
-  photos: getShuffleArray(PHOTOS),
-});
+  return {
+    autor: {
+      avatar: `img/avatars/${getImageNumber()}.png`,
+    },
+    offer: {
+      title: getTitle(),
+      address: `${CURRENT_LOCATION.lat}, ${CURRENT_LOCATION.lng}`,
+      price: getRandom(PRICE.MIN, PRICE.MAX),
+      type: getRandomArrayElement(TYPE_HOUSING),
+      rooms: getRandom(1, 4),
+      guests: getRandom(1, 10),
+      checkin: getRandomArrayElement(CHECKIN),
+      checkout: getRandomArrayElement(CHECKOUT),
+      features: getShuffleArray(FEATURES),
+      description: getDescription(),
+      photos: getShuffleArray(PHOTOS),
+    },
+    location: CURRENT_LOCATION,
+  };
+};
 
-const createList = () => ({
-  autor: getAuthor(),
-  offer: getOffer(),
-  location: getLocation(),
-});
-
-const getNewArray = new Array(10).fill(null).map(() => createList());
-
-export {getNewArray};
+export {createOffer};
+export {TYPE_HOUSING};
