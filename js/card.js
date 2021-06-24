@@ -1,49 +1,49 @@
-import {TYPE_HOUSING} from './data.js';
+import {typeHousing} from './data.js';
 
 const cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
 
-const createFeatures = (path, items) => {
-  path.innerHTML = '';
+const createFeatures = (container, features) => {
+  container.innerHTML = '';
   const fragment = document.createDocumentFragment();
 
-  items.forEach((item) => {
+  features.forEach((feature) => {
     const element = document.createElement('li');
     element.classList.add('popup__feature');
-    element.classList.add(`popup__feature--${item}`);
+    element.classList.add(`popup__feature--${feature}`);
     fragment.appendChild(element);
   });
 
-  path.appendChild(fragment);
+  container.appendChild(fragment);
 
-  if (items.lengt === 0) {
-    path.classList.add('hidden');
+  if (features.lengt === 0) {
+    container.classList.add('hidden');
   }
 };
 
-const createPhotos = (path, items) => {
+const createPhotos = (container, photos) => {
   const fragment = document.createDocumentFragment();
 
-  items.forEach((item) => {
-    const element = path.querySelector('.popup__photo').cloneNode(true);
-    element.src = item;
+  photos.forEach((photo) => {
+    const element = container.querySelector('.popup__photo').cloneNode(true);
+    element.src = photo;
     fragment.appendChild(element);
   });
 
-  path.innerHTML = '';
+  container.innerHTML = '';
 
-  path.appendChild(fragment);
+  container.appendChild(fragment);
 
-  if (items.lengt === 0) {
-    path.classList.add('hidden');
+  if (photos.lengt === 0) {
+    container.classList.add('hidden');
   }
 };
 
-const getListAds = (array) => {
+const renderAds = (ad) => {
   const adsFragment = document.createDocumentFragment();
 
-  array.forEach( (element) => {
+  ad.forEach( (element) => {
     const cardElemet = cardTemplate.cloneNode(true);
 
     cardElemet.querySelector('.popup__avatar').src = element.autor.avatar;
@@ -51,7 +51,7 @@ const getListAds = (array) => {
     cardElemet.querySelector('.popup__title').textContent = element.offer.title;
     cardElemet.querySelector('.popup__text--address').textContent = element.offer.address;
     cardElemet.querySelector('.popup__text--price').textContent = `${element.offer.price}₽/ночь`;
-    cardElemet.querySelector('.popup__type').textContent = TYPE_HOUSING[element.offer.type];
+    cardElemet.querySelector('.popup__type').textContent = typeHousing[element.offer.type];
     cardElemet.querySelector('.popup__text--capacity').textContent = `${element.offer.rooms} комнаты для ${element.offer.guests} гостей`;
     cardElemet.querySelector('.popup__text--time').textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}.`;
     createFeatures(cardElemet.querySelector('.popup__features'), element.offer.features);
@@ -63,10 +63,15 @@ const getListAds = (array) => {
         .classList.add('hidden');
     }
 
+    if (element.autor.avatar === 0) {
+      cardElemet.querySelector('.popup__avatar')
+        .classList.add('hidden');
+    }
+
     adsFragment.appendChild(cardElemet);
   });
 
   return adsFragment;
 };
 
-export {getListAds};
+export {renderAds};
