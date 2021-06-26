@@ -1,26 +1,28 @@
 import {getRandom, getRandomArrayElement, getShuffleArray, getImageNumber, getLocation} from './util.js';
 
-const PRICE = {
+const  OFFER_COUNT = 3;
+
+const Price = {
   MIN: 1000,
   MAX: 50000,
 };
 
-const LAT = {
+const Lat = {
   MIN: 35.65000,
   MAX: 35.70000,
 };
 
-const LNG = {
+const Lng = {
   MIN: 139.70000,
   MAX: 139.80000,
 };
 
-const TYPE_HOUSING = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalow: 'Бунгало',
-  hotel: 'Отель',
+const TypeHousing = {
+  PALACE: 'Дворец',
+  FLAT: 'Квартира',
+  HOUSE: 'Дом',
+  BUNGALOW: 'Бунгало',
+  HOTEL: 'Отель',
 };
 
 const CHECKIN = [
@@ -55,7 +57,7 @@ const getTitle = () => `Предложение №${getRandom (1, 10)}`;
 const getDescription = () => `Описание №${getRandom (1, 10)}`;
 
 const createOffer = () => {
-  const CURRENT_LOCATION = getLocation(LAT, LNG);
+  const CURRENT_LOCATION = getLocation(Lat, Lng);
 
   return {
     autor: {
@@ -64,8 +66,8 @@ const createOffer = () => {
     offer: {
       title: getTitle(),
       address: `${CURRENT_LOCATION.lat}, ${CURRENT_LOCATION.lng}`,
-      price: getRandom(PRICE.MIN, PRICE.MAX),
-      type: getRandomArrayElement(TYPE_HOUSING),
+      price: getRandom(Price.MIN, Price.MAX),
+      type: getRandomArrayElement(Object.keys(TypeHousing)),
       rooms: getRandom(1, 4),
       guests: getRandom(1, 10),
       checkin: getRandomArrayElement(CHECKIN),
@@ -78,5 +80,7 @@ const createOffer = () => {
   };
 };
 
-export {createOffer};
-export {TYPE_HOUSING};
+const getAds = () => new Array(OFFER_COUNT).fill(null).map(() => createOffer());
+
+export {getAds, TypeHousing};
+
