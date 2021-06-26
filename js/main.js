@@ -1,14 +1,14 @@
-import {createOffer} from './data.js';
-import {renderAds} from './card.js';
+import {getAds} from './data.js';
+import {renderCardAd} from './card.js';
 import {inactiveState, activeState} from './form.js';
-
-const  OFFER_COUNT = 3;
-
-const getAds = () => new Array(OFFER_COUNT).fill(null).map(() => createOffer());
 
 const mapCanvas = document.querySelector('#map-canvas');
 
-mapCanvas.appendChild((renderAds(getAds())).firstChild);
+const adData = getAds()[0];
+
+const cardAd = renderCardAd(adData);
+
+mapCanvas.appendChild(cardAd);
 
 inactiveState();
 activeState();
