@@ -7,7 +7,6 @@ const priceInput = adForm.querySelector('#price');
 const typeInput = adForm.querySelector('#type');
 const roomNumberInput = adForm.querySelector('#room_number');
 const capacityInput = adForm.querySelector('#capacity');
-//const roomNumberOption = roomNumberInput.querySelectorAll('option');
 const capacityOption = capacityInput.querySelectorAll('option');
 const timeInInpup = adForm.querySelector('#timein');
 const timeOutInput = adForm.querySelector('#timeout');
@@ -30,8 +29,6 @@ const capacityGuests = {
   3: [1, 2, 3],
   100: [0],
 };
-
-priceInput.placeholder = PRICE_HOUSING[typeInput.value];
 
 // "Заголовок объявления"
 
@@ -75,13 +72,19 @@ priceInput.addEventListener('input', () => {
   priceInput.reportValidity();
 });
 
-/*Не понимаю почему в таком виде событие "change" не изменяется
+// «Количество комнат» и «Количество мест»
 
-const CapacityRooms = () => {
-
+const capasityOptionDisabled = () => {
   capacityOption.forEach((item) => {
     item.setAttribute('disabled', '');
   });
+};
+
+capasityOptionDisabled();
+
+const CapacityRooms = () => {
+
+  capasityOptionDisabled();
 
   const numberRooms = capacityGuests[roomNumberInput.value];
 
@@ -94,25 +97,7 @@ const CapacityRooms = () => {
   });
 };
 
-roomNumberInput.addEventListener('change', CapacityRooms);*/
-
-// «Количество комнат» и «Количество мест»
-
-roomNumberInput.addEventListener('change', () => {
-  capacityOption.forEach((item) => {
-    item.setAttribute('disabled', '');
-  });
-
-  const numberRooms = capacityGuests[roomNumberInput.value];
-
-  numberRooms.forEach((room) => {
-    capacityOption.forEach((item) => {
-      if (+item.value === room) {
-        item.removeAttribute('disabled');
-      }
-    });
-  });
-});
+roomNumberInput.addEventListener('change', CapacityRooms);
 
 // «Время заезда» и «Время выезда»
 
