@@ -7,7 +7,7 @@ const priceInput = adForm.querySelector('#price');
 const typeInput = adForm.querySelector('#type');
 const roomNumberInput = adForm.querySelector('#room_number');
 const capacityInput = adForm.querySelector('#capacity');
-const capacityOption = capacityInput.querySelectorAll('option');
+const capacityOptions = capacityInput.querySelectorAll('option');
 const timeInInpup = adForm.querySelector('#timein');
 const timeOutInput = adForm.querySelector('#timeout');
 
@@ -23,7 +23,7 @@ const priceHousing = {
   hotel: 3000,
 };
 
-const capacityGuests = {
+const roomsGuests = {
   1: [1],
   2: [1, 2],
   3: [1, 2, 3],
@@ -72,7 +72,7 @@ priceInput.addEventListener('input', () => {
 // «Количество комнат» и «Количество мест»
 
 const capasityOptionDisabled = () => {
-  capacityOption.forEach((item) => {
+  capacityOptions.forEach((item) => {
     item.setAttribute('disabled', '');
   });
 };
@@ -80,17 +80,18 @@ const capasityOptionDisabled = () => {
 capasityOptionDisabled();
 
 const CapacityRooms = () => {
+  const capacityGuests = roomsGuests[roomNumberInput.value];
 
-  capasityOptionDisabled();
+  capacityOptions.forEach((item) => {
+    const guests = +item.value;
 
-  const numberRooms = capacityGuests[roomNumberInput.value];
+    if (capacityGuests.includes(guests)) {
+      item.disabled = false;
+    } else {item.disabled = true;}
 
-  numberRooms.forEach((room) => {
-    capacityOption.forEach((item) => {
-      if (+item.value === room) {
-        item.removeAttribute('disabled');
-      }
-    });
+    if (capacityGuests.includes(0)) {
+      item.selected = true;
+    } else {item.selected = '';}
   });
 };
 
