@@ -15,7 +15,7 @@ const MIN_LENGTH_TITLE = 30;
 const MAX_LENGTH_TITLE = 100;
 const MAX_VALUE_PRICE = 1000000;
 
-const PRICE_HOUSING = {
+const priceHousing = {
   palace: 10000,
   flat: 1000,
   house: 5000,
@@ -51,12 +51,12 @@ titleInput.addEventListener('input', () => {
 // «Тип жилья» и «Цена за ночь»
 
 typeInput.addEventListener('change', () => {
-  priceInput.placeholder = PRICE_HOUSING[typeInput.value];
+  priceInput.placeholder = priceHousing[typeInput.value];
 });
 
 priceInput.addEventListener('input', () => {
   const valuePrice = priceInput.value;
-  priceInput.min = PRICE_HOUSING[typeInput.value];
+  priceInput.min = priceHousing[typeInput.value];
   const minValuePrice = priceInput.min;
 
   if (+valuePrice > MAX_VALUE_PRICE) {
