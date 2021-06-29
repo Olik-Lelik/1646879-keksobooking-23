@@ -52,19 +52,16 @@ titleInput.addEventListener('input', () => {
 
 typeInput.addEventListener('change', () => {
   priceInput.placeholder = priceHousing[typeInput.value];
+  priceInput.min = priceHousing[typeInput.value];
 });
 
 priceInput.addEventListener('input', () => {
   const valuePrice = priceInput.value;
-  priceInput.min = priceHousing[typeInput.value];
-  const minValuePrice = priceInput.min;
 
   if (+valuePrice > MAX_VALUE_PRICE) {
     priceInput.setCustomValidity(`Максимальная цена — ${MAX_VALUE_PRICE}.`);
   } else if (priceInput.validity.valueMissing) {
     priceInput.setCustomValidity('Обязательное поле');
-  } else if (+valuePrice < minValuePrice) {
-    priceInput.setCustomValidity(`Минимальная цена — ${minValuePrice}.`);
   } else {
     priceInput.setCustomValidity('');
   }
