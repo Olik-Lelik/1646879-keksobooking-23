@@ -1,6 +1,6 @@
 import {getAds} from './data.js';
 import {renderCardAd} from './card.js';
-import {inactiveState, activeState} from './form.js';
+import './form.js';
 
 const mapCanvas = document.querySelector('#map-canvas');
 
@@ -10,5 +10,6 @@ const cardAd = renderCardAd(adData);
 
 mapCanvas.appendChild(cardAd);
 
-inactiveState();
-activeState();
+//inactiveState();
+//activeState();
+//setFormValidity();
