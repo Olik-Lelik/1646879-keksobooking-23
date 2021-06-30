@@ -10,6 +10,7 @@ const capacityInput = adForm.querySelector('#capacity');
 const capacityOptions = capacityInput.querySelectorAll('option');
 const timeInInpup = adForm.querySelector('#timein');
 const timeOutInput = adForm.querySelector('#timeout');
+const addressInput = adForm.querySelector('#address');
 
 const MIN_LENGTH_TITLE = 30;
 const MAX_LENGTH_TITLE = 100;
@@ -71,13 +72,13 @@ priceInput.addEventListener('input', () => {
 
 // «Количество комнат» и «Количество мест»
 
-const capasityOptionDisabled = () => {
+const capacityOptionDisabled = () => {
   capacityOptions.forEach((item) => {
     item.setAttribute('disabled', '');
   });
 };
 
-capasityOptionDisabled();
+capacityOptionDisabled();
 
 const CapacityRooms = () => {
   const capacityGuests = roomsGuests[roomNumberInput.value];
@@ -110,6 +111,12 @@ const changeTimeOutInpup = () => {
 timeInInpup.addEventListener('change', changeTimeInInpup);
 timeOutInput.addEventListener('change', changeTimeOutInpup);
 
+// "Выбор адреса на карте"
+
+const AddressInput = (coordinates) => {
+  addressInput.value = `${+((coordinates.lat).toFixed(5))}, ${+((coordinates.lng).toFixed(5))}`;
+};
+
 // "Неактивное состояние" и "Активное состояние"
 
 const inactiveState = () => {
@@ -134,4 +141,4 @@ const activeState = () => {
   }
 };
 
-export {inactiveState, activeState}; // Пока оставила так, чтобы линтер не ругался
+export {inactiveState, activeState, AddressInput}; // Пока оставила так, чтобы линтер не ругался
