@@ -17,11 +17,11 @@ const MAX_LENGTH_TITLE = 100;
 const MAX_VALUE_PRICE = 1000000;
 
 const priceHousing = {
-  palace: 10000,
-  flat: 1000,
-  house: 5000,
-  bungalow: 0,
-  hotel: 3000,
+  palace: '10000',
+  flat: '1000',
+  house: '5000',
+  bungalow: '0',
+  hotel: '3000',
 };
 
 const roomsGuests = {
@@ -57,9 +57,9 @@ typeInput.addEventListener('change', () => {
 });
 
 priceInput.addEventListener('input', () => {
-  const valuePrice = priceInput.value;
+  const valuePrice = +priceInput.value;
 
-  if (+valuePrice > MAX_VALUE_PRICE) {
+  if (valuePrice > MAX_VALUE_PRICE) {
     priceInput.setCustomValidity(`Максимальная цена — ${MAX_VALUE_PRICE}.`);
   } else if (priceInput.validity.valueMissing) {
     priceInput.setCustomValidity('Обязательное поле');
@@ -72,31 +72,27 @@ priceInput.addEventListener('input', () => {
 
 // «Количество комнат» и «Количество мест»
 
-const capacityOptionDisabled = () => {
+const disableCapacityOption = () => {
   capacityOptions.forEach((item) => {
     item.setAttribute('disabled', '');
   });
 };
 
-capacityOptionDisabled();
+disableCapacityOption();
 
-const CapacityRooms = () => {
+const changeCapacityRooms = () => {
   const capacityGuests = roomsGuests[roomNumberInput.value];
 
   capacityOptions.forEach((item) => {
     const guests = +item.value;
 
-    if (capacityGuests.includes(guests)) {
-      item.disabled = false;
-    } else {item.disabled = true;}
+    item.disabled = !capacityGuests.includes(guests);
 
-    if (capacityGuests.includes(0)) {
-      item.selected = true;
-    } else {item.selected = '';}
+    item.selected = capacityGuests.includes(guests);
   });
 };
 
-roomNumberInput.addEventListener('change', CapacityRooms);
+roomNumberInput.addEventListener('change', changeCapacityRooms);
 
 // «Время заезда» и «Время выезда»
 
@@ -113,13 +109,13 @@ timeOutInput.addEventListener('change', changeTimeOutInpup);
 
 // "Выбор адреса на карте"
 
-const AddressInput = (coordinates) => {
+const changeAddressInput = (coordinates) => {
   addressInput.value = `${+((coordinates.lat).toFixed(5))}, ${+((coordinates.lng).toFixed(5))}`;
 };
 
 // "Неактивное состояние" и "Активное состояние"
 
-const inactiveState = () => {
+const disableState = () => {
   adForm.classList.add('ad-form--disabled');
   for (const elem of adFormList) {
     elem.setAttribute('disabled', 'disabled');
@@ -130,7 +126,7 @@ const inactiveState = () => {
   }
 };
 
-const activeState = () => {
+const enableState = () => {
   adForm.classList.remove('ad-form--disabled');
   for (const elem of adFormList) {
     elem.removeAttribute('disabled');
@@ -141,4 +137,4 @@ const activeState = () => {
   }
 };
 
-export {inactiveState, activeState, AddressInput}; // Пока оставила так, чтобы линтер не ругался
+export {disableState, enableState, changeAddressInput};
