@@ -7,23 +7,24 @@ const priceInput = adForm.querySelector('#price');
 const typeInput = adForm.querySelector('#type');
 const roomNumberInput = adForm.querySelector('#room_number');
 const capacityInput = adForm.querySelector('#capacity');
-const capacityOption = capacityInput.querySelectorAll('option');
+const capacityOptions = capacityInput.querySelectorAll('option');
 const timeInInpup = adForm.querySelector('#timein');
 const timeOutInput = adForm.querySelector('#timeout');
+const addressInput = adForm.querySelector('#address');
 
 const MIN_LENGTH_TITLE = 30;
 const MAX_LENGTH_TITLE = 100;
 const MAX_VALUE_PRICE = 1000000;
 
 const priceHousing = {
-  palace: 10000,
-  flat: 1000,
-  house: 5000,
-  bungalow: 0,
-  hotel: 3000,
+  palace: '10000',
+  flat: '1000',
+  house: '5000',
+  bungalow: '0',
+  hotel: '3000',
 };
 
-const capacityGuests = {
+const roomsGuests = {
   1: [1],
   2: [1, 2],
   3: [1, 2, 3],
@@ -56,9 +57,9 @@ typeInput.addEventListener('change', () => {
 });
 
 priceInput.addEventListener('input', () => {
-  const valuePrice = priceInput.value;
+  const valuePrice = +priceInput.value;
 
-  if (+valuePrice > MAX_VALUE_PRICE) {
+  if (valuePrice > MAX_VALUE_PRICE) {
     priceInput.setCustomValidity(`Максимальная цена — ${MAX_VALUE_PRICE}.`);
   } else if (priceInput.validity.valueMissing) {
     priceInput.setCustomValidity('Обязательное поле');
@@ -71,30 +72,27 @@ priceInput.addEventListener('input', () => {
 
 // «Количество комнат» и «Количество мест»
 
-const capasityOptionDisabled = () => {
-  capacityOption.forEach((item) => {
+const disableCapacityOption = () => {
+  capacityOptions.forEach((item) => {
     item.setAttribute('disabled', '');
   });
 };
 
-capasityOptionDisabled();
+disableCapacityOption();
 
-const CapacityRooms = () => {
+const changeCapacityRooms = () => {
+  const capacityGuests = roomsGuests[roomNumberInput.value];
 
-  capasityOptionDisabled();
+  capacityOptions.forEach((item) => {
+    const guests = +item.value;
 
-  const numberRooms = capacityGuests[roomNumberInput.value];
+    item.disabled = !capacityGuests.includes(guests);
 
-  numberRooms.forEach((room) => {
-    capacityOption.forEach((item) => {
-      if (+item.value === room) {
-        item.removeAttribute('disabled');
-      }
-    });
+    item.selected = capacityGuests.includes(guests);
   });
 };
 
-roomNumberInput.addEventListener('change', CapacityRooms);
+roomNumberInput.addEventListener('change', changeCapacityRooms);
 
 // «Время заезда» и «Время выезда»
 
@@ -109,9 +107,15 @@ const changeTimeOutInpup = () => {
 timeInInpup.addEventListener('change', changeTimeInInpup);
 timeOutInput.addEventListener('change', changeTimeOutInpup);
 
+// "Выбор адреса на карте"
+
+const changeAddressInput = (coordinates) => {
+  addressInput.value = `${+((coordinates.lat).toFixed(5))}, ${+((coordinates.lng).toFixed(5))}`;
+};
+
 // "Неактивное состояние" и "Активное состояние"
 
-const inactiveState = () => {
+const disableState = () => {
   adForm.classList.add('ad-form--disabled');
   for (const elem of adFormList) {
     elem.setAttribute('disabled', 'disabled');
@@ -122,7 +126,7 @@ const inactiveState = () => {
   }
 };
 
-const activeState = () => {
+const enableState = () => {
   adForm.classList.remove('ad-form--disabled');
   for (const elem of adFormList) {
     elem.removeAttribute('disabled');
@@ -133,4 +137,4 @@ const activeState = () => {
   }
 };
 
-export {inactiveState, activeState}; // Пока оставила так, чтобы линтер не ругался
+export {disableState, enableState, changeAddressInput};
