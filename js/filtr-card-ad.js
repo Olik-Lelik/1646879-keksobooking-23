@@ -44,40 +44,40 @@ const createFeatures = (container, features) => {
   container.innerHTML = '';
   const fragment = document.createDocumentFragment();
 
-  if (features.length === 0) {
+  if (!features) {
     container.classList.add('hidden');
+  } else {
+    features.forEach((feature) => {
+      const element = document.createElement('li');
+      element.classList.add('popup__feature');
+      element.classList.add(`popup__feature--${feature}`);
+      fragment.appendChild(element);
+    });
+
+    container.appendChild(fragment);
   }
-
-  features.forEach((feature) => {
-    const element = document.createElement('li');
-    element.classList.add('popup__feature');
-    element.classList.add(`popup__feature--${feature}`);
-    fragment.appendChild(element);
-  });
-
-  container.appendChild(fragment);
 };
 
 const createPhotos = (container, photos) => {
   const fragment = document.createDocumentFragment();
 
-  if (photos.length === 0) {
+  if (!photos) {
     container.classList.add('hidden');
+  } else {
+    photos.forEach((photo) => {
+      const element = container.querySelector('.popup__photo').cloneNode(true);
+      element.src = photo;
+      fragment.appendChild(element);
+    });
+
+    container.innerHTML = '';
+
+    container.appendChild(fragment);
   }
-
-  photos.forEach((photo) => {
-    const element = container.querySelector('.popup__photo').cloneNode(true);
-    element.src = photo;
-    fragment.appendChild(element);
-  });
-
-  container.innerHTML = '';
-
-  container.appendChild(fragment);
 };
 
 const checkDataAvailable = (container, item) => {
-  if (item.length === 0) {
+  if (!item) {
     container.classList.add('hidden');
   } else {
     container.textContent = item;

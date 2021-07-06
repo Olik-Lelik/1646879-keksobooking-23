@@ -10,21 +10,21 @@ const cardTemplate = document.querySelector('#card')
  * @return {Object} - Разметка карточки объявления
  */
 const renderCardAd = (ad) => {
-  const cardElemet = cardTemplate.cloneNode(true);
+  const cardElement = cardTemplate.cloneNode(true);
 
-  createAutorAvatar(cardElemet.querySelector('.popup__avatar'), ad.autor.avatar);
+  createAutorAvatar(cardElement.querySelector('.popup__avatar'), ad.author.avatar);
 
-  checkDataAvailable(cardElemet.querySelector('.popup__title'), ad.offer.title);
-  checkDataAvailable(cardElemet.querySelector('.popup__text--address'), ad.offer.address);
-  createPrice(cardElemet.querySelector('.popup__text--price'), ad.offer.price);
-  createTypeHousing(cardElemet.querySelector('.popup__type'), ad.offer.type);
-  createCapacity(cardElemet.querySelector('.popup__text--capacity'), ad.offer.rooms, ad.offer.guests);
-  createTime(cardElemet.querySelector('.popup__text--time'), ad.offer.checkin, ad.offer.checkout);
-  createFeatures(cardElemet.querySelector('.popup__features'), ad.offer.features);
-  checkDataAvailable(cardElemet.querySelector('.popup__description'), ad.offer.description);
-  createPhotos(cardElemet.querySelector('.popup__photos'), ad.offer.photos);
+  checkDataAvailable(cardElement.querySelector('.popup__title'), ad.offer.title);
+  checkDataAvailable(cardElement.querySelector('.popup__text--address'), ad.offer.address);
+  createPrice(cardElement.querySelector('.popup__text--price'), ad.offer.price);
+  createTypeHousing(cardElement.querySelector('.popup__type'), ad.offer.type);
+  createCapacity(cardElement.querySelector('.popup__text--capacity'), ad.offer.rooms, ad.offer.guests);
+  createTime(cardElement.querySelector('.popup__text--time'), ad.offer.checkin, ad.offer.checkout);
+  createFeatures(cardElement.querySelector('.popup__features'), ad.offer.features);
+  checkDataAvailable(cardElement.querySelector('.popup__description'), ad.offer.description);
+  createPhotos(cardElement.querySelector('.popup__photos'), ad.offer.photos);
 
-  return cardElemet;
+  return cardElement;
 };
 
 export {renderCardAd};

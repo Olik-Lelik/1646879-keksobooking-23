@@ -1,9 +1,18 @@
-import './form.js';
-import {getAds} from './data.js';
+import {onUserFormSubmit, onButtonReset, disableState} from './form.js';
 import {initialMap, renderAdsMarkers, mainMarkerLatLng} from './map.js';
+import {getData} from './api.js';
+import {getSuccessPopup, getErrorPopup} from './user-modal.js';
 
-const cardsAds = getAds();
+const COUNT = 10;
+
+disableState();
 
 initialMap();
 mainMarkerLatLng();
-renderAdsMarkers(cardsAds);
+
+getData((cards) => {
+  renderAdsMarkers(cards.slice(0, COUNT));
+});
+
+onUserFormSubmit(getSuccessPopup, getErrorPopup);
+onButtonReset();

@@ -1,3 +1,11 @@
+import { resetPage } from './map.js';
+import { closeErrorPopup } from './user-modal.js';
+import { sendData } from './api.js';
+
+const MIN_LENGTH_TITLE = 30;
+const MAX_LENGTH_TITLE = 100;
+const MAX_VALUE_PRICE = 1000000;
+
 const adForm = document.querySelector('.ad-form');
 const adFormList = adForm.children;
 const mapFilters = document.querySelector('.map__filters');
@@ -11,17 +19,14 @@ const capacityOptions = capacityInput.querySelectorAll('option');
 const timeInInpup = adForm.querySelector('#timein');
 const timeOutInput = adForm.querySelector('#timeout');
 const addressInput = adForm.querySelector('#address');
-
-const MIN_LENGTH_TITLE = 30;
-const MAX_LENGTH_TITLE = 100;
-const MAX_VALUE_PRICE = 1000000;
+const adFormReset = adForm.querySelector('.ad-form__reset');
 
 const priceHousing = {
-  palace: '10000',
-  flat: '1000',
-  house: '5000',
-  bungalow: '0',
-  hotel: '3000',
+  palace: 10000,
+  flat: 1000,
+  house: 5000,
+  bungalow: 0,
+  hotel: 3000,
 };
 
 const roomsGuests = {
@@ -51,13 +56,15 @@ titleInput.addEventListener('input', () => {
 
 // «Тип жилья» и «Цена за ночь»
 
-typeInput.addEventListener('change', () => {
+const changePriceInput = () => {
   priceInput.placeholder = priceHousing[typeInput.value];
   priceInput.min = priceHousing[typeInput.value];
-});
+};
+
+typeInput.addEventListener('change', changePriceInput);
 
 priceInput.addEventListener('input', () => {
-  const valuePrice = +priceInput.value;
+  const valuePrice = priceInput.value;
 
   if (valuePrice > MAX_VALUE_PRICE) {
     priceInput.setCustomValidity(`Максимальная цена — ${MAX_VALUE_PRICE}.`);
@@ -110,7 +117,7 @@ timeOutInput.addEventListener('change', changeTimeOutInpup);
 // "Выбор адреса на карте"
 
 const changeAddressInput = (coordinates) => {
-  addressInput.value = `${+((coordinates.lat).toFixed(5))}, ${+((coordinates.lng).toFixed(5))}`;
+  addressInput.value = `${(coordinates.lat).toFixed(5)}, ${(coordinates.lng).toFixed(5)}`;
 };
 
 // "Неактивное состояние" и "Активное состояние"
@@ -137,4 +144,22 @@ const enableState = () => {
   }
 };
 
-export {disableState, enableState, changeAddressInput};
+const onUserFormSubmit = (onSuccess, onFail) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const formData = new FormData(evt.target);
+
+    sendData(onSuccess, onFail, resetPage, formData, closeErrorPopup);
+  });
+};
+
+const onButtonReset = () => {
+  adFormReset.addEventListener('click', (evt) => {
+    evt.preventDefault();
+
+    resetPage();
+  } );
+};
+
+export {disableState, enableState, changeAddressInput, onUserFormSubmit, adForm, changePriceInput, onButtonReset};
