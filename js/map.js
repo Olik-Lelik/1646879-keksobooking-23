@@ -1,4 +1,4 @@
-import {enableState, changeAddressInput} from './form.js';
+import {enableState, changeAddressInput, adForm, changePriceInput} from './form.js';
 import {renderCardAd} from './card.js';
 
 const initialPoint = {
@@ -13,18 +13,18 @@ const map = L.map('map-canvas');
 const initialMap = () => {
   map
     .on('load', () => {
-      enableState,
+      enableState(),
       changeAddressInput(initialPoint);
     })
     .setView(initialPoint, SCALE);
-};
 
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
+};
 
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
@@ -77,7 +77,14 @@ const renderAdsMarkers = (ads) => ads.forEach((ad) => {
   createPinMarker(ad);
 });
 
-//const resetMarker = map.setView(initialPoint, SCALE);; возвращает гл.маркер и масштаб в изначальное состояние.
 //const clearMarker = markerGroup.clearLayers(); очищает слой с метками объявлений.
+const resetPage = () => {
+  mainPinMarker.setLatLng(initialPoint);
+  map.setView(initialPoint, SCALE);
+  adForm.reset();
+  const resetMainPinMarker = mainPinMarker.getLatLng();
+  changeAddressInput(resetMainPinMarker);
+  changePriceInput();
+};
 
-export {initialMap, renderAdsMarkers, mainMarkerLatLng};
+export {initialMap, renderAdsMarkers, mainMarkerLatLng, resetPage};
