@@ -1,4 +1,4 @@
-import { getDataErrorPopup, openPopup} from './user-modal.js';
+import { getDataErrorPopup, createPopup, closeErrorPopup} from './user-modal.js';
 
 const getData = (onSuccess) => {
   fetch('https://23.javascript.pages.academy/keksobooking/data')
@@ -6,18 +6,18 @@ const getData = (onSuccess) => {
       if (response.ok) {
         return response.json();
       } else {
-        getDataErrorPopup(`${response.status} ${response.statusText}`, openPopup);
+        getDataErrorPopup(`${response.status} ${response.statusText}`, createPopup);
       }
     })
     .then((cards) => {
       onSuccess(cards);
     })
     .catch((err) => {
-      getDataErrorPopup(err, openPopup);
+      getDataErrorPopup(err, createPopup);
     });
 };
 
-const sendData = (onSuccess, onError, reset, body, closeButton) => {
+const sendData = (onSuccess, onError, reset, body) => {
   fetch(
     'https://23.javascript.pages.academy/keksobooking',
     {
@@ -30,12 +30,12 @@ const sendData = (onSuccess, onError, reset, body, closeButton) => {
       reset();
     } else {
       onError(),
-      closeButton();
+      closeErrorPopup();
     }
   })
     .catch(() => {
       onError(),
-      closeButton();
+      closeErrorPopup();
     });
 };
 

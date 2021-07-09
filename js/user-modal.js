@@ -1,3 +1,5 @@
+import {isEscEvent} from './util.js';
+
 const successTemplate = document.querySelector('#success')
   .content
   .querySelector('.success');
@@ -6,12 +8,12 @@ const errorTemplate = document.querySelector('#error')
   .content
   .querySelector('.error');
 
+const errorDataPopup = errorTemplate.cloneNode(true);
+
 const errorButton = errorTemplate.querySelector('.error__button');
 
 const getDataErrorPopup = (message, cb) => {
-  const errorPopup = errorTemplate.cloneNode(true);
-
-  errorPopup.innerHTML = '';
+  errorDataPopup.innerHTML = '';
 
   const fragment = document.createDocumentFragment();
 
@@ -21,35 +23,57 @@ const getDataErrorPopup = (message, cb) => {
   element.textContent = message;
   fragment.appendChild(element);
 
-  errorPopup.appendChild(fragment);
+  errorDataPopup.appendChild(fragment);
 
-  cb(errorPopup);
+  cb(errorDataPopup);
 };
 
-const openPopup = (popup) => {
+const onPopupEscKeydown = (evt) => {
+  if (isEscEvent(evt)) {
+    evt.preventDefault();
+    closePopup();
+  }
+};
+
+const onPopupCloseClick = (evt) => {
+  if (evt.target.className !== 'success__message' && evt.target.className !== 'error__message' && evt.target.className !== 'error__button') {
+    evt.preventDefault();
+    closePopup();
+  }
+};
+
+const onPopupButtonClick = () => {
+  closePopup();
+};
+
+function closePopup () {
+  if (errorDataPopup) {
+    errorDataPopup.remove();
+  }
+  if (successTemplate) {
+    successTemplate.remove();
+  }
+  if (errorTemplate) {
+    errorTemplate.remove();
+  }
+
+  document.removeEventListener('keydown', onPopupEscKeydown);
+  document.removeEventListener('click', onPopupCloseClick);
+}
+
+const createPopup = (popup) => {
   document.body.append(popup);
 
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      popup.remove();
-    }
-  }, {once: true});
+  document.addEventListener('keydown', onPopupEscKeydown);
 
-  document.addEventListener('click', (evt) => {
-    if (evt.target.className !== 'success__message' && evt.target.className !== 'error__message' && evt.target.className !== 'error__button') {
-      popup.remove();
-    }
-  }, {once: true});
+  document.addEventListener('click', onPopupCloseClick);
 };
 
 const closeErrorPopup = () => {
-  errorButton.addEventListener('click', () => {
-    errorTemplate.remove();
-  });
+  errorButton.addEventListener('click', onPopupButtonClick);
 };
 
-const getSuccessPopup = () => openPopup(successTemplate);
-const getErrorPopup = () => openPopup(errorTemplate);
+const getSuccessPopup = () => createPopup(successTemplate);
+const getErrorPopup = () => createPopup(errorTemplate);
 
-export {getSuccessPopup, getErrorPopup, closeErrorPopup, getDataErrorPopup, openPopup};
+export {getSuccessPopup, getErrorPopup, closeErrorPopup, getDataErrorPopup, createPopup};

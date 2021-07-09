@@ -1,4 +1,4 @@
-import {onUserFormSubmit, onButtonReset, disableState} from './form.js';
+import {getUserFormSubmit, onButtonReset, disableState} from './form.js';
 import {initialMap, renderAdsMarkers, mainMarkerLatLng} from './map.js';
 import {getData} from './api.js';
 import {getSuccessPopup, getErrorPopup} from './user-modal.js';
@@ -14,5 +14,5 @@ getData((cards) => {
   renderAdsMarkers(cards.slice(0, COUNT));
 });
 
-onUserFormSubmit(getSuccessPopup, getErrorPopup);
+getUserFormSubmit(getSuccessPopup, getErrorPopup);
 onButtonReset();

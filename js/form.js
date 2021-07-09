@@ -1,5 +1,4 @@
 import { resetPage } from './map.js';
-import { closeErrorPopup } from './user-modal.js';
 import { sendData } from './api.js';
 
 const MIN_LENGTH_TITLE = 30;
@@ -81,7 +80,11 @@ priceInput.addEventListener('input', () => {
 
 const disableCapacityOption = () => {
   capacityOptions.forEach((item) => {
-    item.setAttribute('disabled', '');
+    if (item.selected) {
+      item.disabled = false;
+    } else {
+      item.disabled = true;
+    }
   });
 };
 
@@ -144,13 +147,13 @@ const enableState = () => {
   }
 };
 
-const onUserFormSubmit = (onSuccess, onFail) => {
+const getUserFormSubmit = (onSuccess, onError) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const formData = new FormData(evt.target);
 
-    sendData(onSuccess, onFail, resetPage, formData, closeErrorPopup);
+    sendData(onSuccess, onError, resetPage, formData);
   });
 };
 
@@ -162,4 +165,4 @@ const onButtonReset = () => {
   } );
 };
 
-export {disableState, enableState, changeAddressInput, onUserFormSubmit, adForm, changePriceInput, onButtonReset};
+export {disableState, enableState, changeAddressInput, getUserFormSubmit, adForm, changePriceInput, onButtonReset};

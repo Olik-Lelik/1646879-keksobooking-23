@@ -59,7 +59,7 @@ const createPinMarker = (data) => {
   const pinMarker = L.marker(
     data.location,
     {
-      pinIcon,
+      icon: pinIcon,
     },
   );
 
