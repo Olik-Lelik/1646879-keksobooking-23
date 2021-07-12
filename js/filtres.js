@@ -62,10 +62,10 @@ const getFilteredAds = (ads) =>
     .forEach((ad) => createPinMarker(ad));
 
 //перерисовка карты
-const setFilterChange = (ads) => {
+const setFilterChange = (cb) => {
   mapFilters.addEventListener('change', () => {
     clearMarker(),
-    getFilteredAds(ads);
+    cb();
   });
 };
 

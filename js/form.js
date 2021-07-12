@@ -1,6 +1,6 @@
-import {resetPage} from './map.js';
+import {resetPage, clearMarker} from './map.js';
 import {sendData} from './api.js';
-import {mapFilters, mapFiltersList} from './filtres.js';
+import {mapFilters, mapFiltersList, getFilteredAds} from './filtres.js';
 
 const MIN_LENGTH_TITLE = 30;
 const MAX_LENGTH_TITLE = 100;
@@ -161,11 +161,13 @@ const getUserFormSubmit = (onSuccess, onError) => {
 };
 
 //Reset страницы
-const onButtonReset = () => {
+const onButtonReset = (ads) => {
   adFormReset.addEventListener('click', (evt) => {
     evt.preventDefault();
 
     resetPage();
+    clearMarker();
+    getFilteredAds(ads);
   } );
 };
 
