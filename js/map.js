@@ -1,5 +1,7 @@
 import {enableState, changeAddressInput, adForm, changePriceInput} from './form.js';
 import {renderCardAd} from './card.js';
+import {mapFilters} from './filtres.js';
+
 
 const initialPoint = {
   lat: 35.6895,
@@ -73,18 +75,19 @@ const createPinMarker = (data) => {
     );
 };
 
-const renderAdsMarkers = (ads) => ads.forEach((ad) => {
-  createPinMarker(ad);
-});
+//очищает слой с метками объявлений.
+const clearMarker = () => markerGroup.clearLayers();
 
-//const clearMarker = markerGroup.clearLayers(); очищает слой с метками объявлений.
 const resetPage = () => {
   mainPinMarker.setLatLng(initialPoint);
   map.setView(initialPoint, SCALE);
   adForm.reset();
+  const adFormInputs = adForm.querySelectorAll('input');
+  adFormInputs.forEach((input) => input.style.borderColor = '');
   const resetMainPinMarker = mainPinMarker.getLatLng();
   changeAddressInput(resetMainPinMarker);
   changePriceInput();
+  mapFilters.reset();
 };
 
-export {initialMap, renderAdsMarkers, mainMarkerLatLng, resetPage};
+export {initialMap, createPinMarker, mainMarkerLatLng, resetPage, clearMarker};

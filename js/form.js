@@ -1,5 +1,6 @@
-import { resetPage } from './map.js';
-import { sendData } from './api.js';
+import {resetPage} from './map.js';
+import {sendData} from './api.js';
+import {mapFilters, mapFiltersList} from './filtres.js';
 
 const MIN_LENGTH_TITLE = 30;
 const MAX_LENGTH_TITLE = 100;
@@ -7,8 +8,6 @@ const MAX_VALUE_PRICE = 1000000;
 
 const adForm = document.querySelector('.ad-form');
 const adFormList = adForm.children;
-const mapFilters = document.querySelector('.map__filters');
-const mapFiltersList = mapFilters.children;
 const titleInput = adForm.querySelector('#title');
 const priceInput = adForm.querySelector('#price');
 const typeInput = adForm.querySelector('#type');
@@ -41,12 +40,13 @@ titleInput.addEventListener('input', () => {
   const titleLength = titleInput.value.length;
 
   if (titleLength < MIN_LENGTH_TITLE) {
+    titleInput.style.borderColor = 'red';
     titleInput.setCustomValidity(`Минимальная длина — 30 символов. Нужно еще ${MIN_LENGTH_TITLE - titleLength} симв.`);
   } else if (titleLength > MAX_LENGTH_TITLE) {
+    titleInput.style.borderColor = 'red';
     titleInput.setCustomValidity(`Максимальная длина — 100 символов. Удалите лишние ${titleLength - MAX_LENGTH_TITLE} симв.`);
-  } else if (titleInput.validity.valueMissing) {
-    titleInput.setCustomValidity('Обязательное поле');
   } else {
+    titleInput.style.borderColor = 'white';
     titleInput.setCustomValidity('');
   }
 
@@ -65,11 +65,13 @@ typeInput.addEventListener('change', changePriceInput);
 priceInput.addEventListener('input', () => {
   const valuePrice = priceInput.value;
 
-  if (valuePrice > MAX_VALUE_PRICE) {
+  if(valuePrice < priceHousing[typeInput.value]) {
+    priceInput.style.borderColor = 'red';
+  } else if (valuePrice > MAX_VALUE_PRICE) {
+    priceInput.style.borderColor = 'red';
     priceInput.setCustomValidity(`Максимальная цена — ${MAX_VALUE_PRICE}.`);
-  } else if (priceInput.validity.valueMissing) {
-    priceInput.setCustomValidity('Обязательное поле');
   } else {
+    priceInput.style.borderColor = 'white';
     priceInput.setCustomValidity('');
   }
 
@@ -147,6 +149,7 @@ const enableState = () => {
   }
 };
 
+//Отправка формы
 const getUserFormSubmit = (onSuccess, onError) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -157,6 +160,7 @@ const getUserFormSubmit = (onSuccess, onError) => {
   });
 };
 
+//Reset страницы
 const onButtonReset = () => {
   adFormReset.addEventListener('click', (evt) => {
     evt.preventDefault();

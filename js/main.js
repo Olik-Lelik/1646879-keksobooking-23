@@ -1,9 +1,9 @@
 import {getUserFormSubmit, onButtonReset, disableState} from './form.js';
-import {initialMap, renderAdsMarkers, mainMarkerLatLng} from './map.js';
+import {initialMap, mainMarkerLatLng} from './map.js';
 import {getData} from './api.js';
 import {getSuccessPopup, getErrorPopup} from './user-modal.js';
+import {setFilterChange, getFilteredAds} from './filtres.js';
 
-const COUNT = 10;
 
 disableState();
 
@@ -11,7 +11,8 @@ initialMap();
 mainMarkerLatLng();
 
 getData((cards) => {
-  renderAdsMarkers(cards.slice(0, COUNT));
+  getFilteredAds(cards),
+  setFilterChange(cards);
 });
 
 getUserFormSubmit(getSuccessPopup, getErrorPopup);
