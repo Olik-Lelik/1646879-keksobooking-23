@@ -1,4 +1,4 @@
-import {TypeHousing} from './data.js';
+import {TypeHousing} from './util.js';
 
 const createAutorAvatar = (container, avatar) => {
   if (avatar.length === 0) {
