@@ -1,4 +1,4 @@
-import {activateAdForm, changeAddressInput, adForm, changePriceInput} from './form.js';
+import {activateAdForm, changeAddressInput, adForm, onPriceInputChange} from './form.js';
 import {renderCardAd} from './card.js';
 import {mapFilters} from './filtres.js';
 import { avatarPreview, adFormPhoto} from './form.js';
@@ -9,6 +9,14 @@ const initialPoint = {
   lat: 35.6895,
   lng: 139.692,
 };
+
+const MAIN_PIN_SIZE = [52, 52];
+
+const MAIN_PIN_ANCHOR = [52, 52];
+
+const PIN_SIZE = [40, 40];
+
+const PIN_ANCHOR = [40, 40];
 
 const SCALE = 11;
 
@@ -32,8 +40,8 @@ const initialMap = () => {
 
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconSize: MAIN_PIN_SIZE,
+  iconAnchor: MAIN_PIN_ANCHOR,
 });
 
 const mainPinMarker = L.marker(
@@ -56,8 +64,8 @@ const markerGroup = L.layerGroup().addTo(map);
 const createPinMarker = (data) => {
   const pinIcon = L.icon({
     iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+    iconSize: PIN_SIZE,
+    iconAnchor: PIN_ANCHOR,
   });
 
   const pinMarker = L.marker(
@@ -90,7 +98,7 @@ const resetPage = () => {
   adFormInputs.forEach((input) => input.style.borderColor = '');
   const resetMainPinMarker = mainPinMarker.getLatLng();
   changeAddressInput(resetMainPinMarker);
-  changePriceInput();
+  onPriceInputChange();
   mapFilters.reset();
   clearMarker();
 };

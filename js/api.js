@@ -2,13 +2,7 @@ import { getDataErrorPopup, createPopup, closeErrorPopup} from './user-modal.js'
 
 const getData = (onSuccess) => {
   fetch('https://23.javascript.pages.academy/keksobooking/data')
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        getDataErrorPopup(`${response.status} ${response.statusText}`, createPopup);
-      }
-    })
+    .then((response) => (response.ok) ? response.json() : getDataErrorPopup(`${response.status} ${response.statusText}`, createPopup))
     .then((cards) => {
       onSuccess(cards);
     })

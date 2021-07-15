@@ -8,6 +8,26 @@ const MIN_LENGTH_TITLE = 30;
 const MAX_LENGTH_TITLE = 100;
 const MAX_VALUE_PRICE = 1000000;
 
+const DECIMAL_POINT = 5;
+
+const IMG_WIDTH = 70;
+const IMG_HEIGHT = 70;
+
+const priceHousing = {
+  palace: 10000,
+  flat: 1000,
+  house: 5000,
+  bungalow: 0,
+  hotel: 3000,
+};
+
+const roomsGuests = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+};
+
 const adForm = document.querySelector('.ad-form');
 const adFormList = adForm.children;
 const titleInput = adForm.querySelector('#title');
@@ -26,21 +46,6 @@ const avatarPreview = adFormAvatar.querySelector('img').cloneNode(true);
 const avatarChooser = adForm.querySelector('#avatar');
 const photoChooser = adForm.querySelector('#images');
 
-const priceHousing = {
-  palace: 10000,
-  flat: 1000,
-  house: 5000,
-  bungalow: 0,
-  hotel: 3000,
-};
-
-const roomsGuests = {
-  1: [1],
-  2: [1, 2],
-  3: [1, 2, 3],
-  100: [0],
-};
-
 //Фото  аватар
 
 const getAvatar = (result) => {
@@ -58,8 +63,8 @@ const getPhoto = (result) => {
   const element = document.createElement('img');
   element.src = result;
   element.alt = 'Фото жилья';
-  element.width = '70';
-  element.height = '70';
+  element.width = IMG_WIDTH;
+  element.height = IMG_HEIGHT;
   fragment.appendChild(element);
   adFormPhoto.appendChild(fragment);
 };
@@ -91,12 +96,12 @@ titleInput.addEventListener('input', () => {
 
 // «Тип жилья» и «Цена за ночь»
 
-const changePriceInput = () => {
+const onPriceInputChange = () => {
   priceInput.placeholder = priceHousing[typeInput.value];
   priceInput.min = priceHousing[typeInput.value];
 };
 
-typeInput.addEventListener('change', changePriceInput);
+typeInput.addEventListener('change', onPriceInputChange);
 
 priceInput.addEventListener('input', () => {
   const valuePrice = priceInput.value;
@@ -117,12 +122,14 @@ priceInput.addEventListener('input', () => {
 // «Количество комнат» и «Количество мест»
 
 const disableCapacityOption = () => {
-  capacityOptions.forEach((item) => item.disabled = !item.selected);
+  capacityOptions.forEach((item) => {
+    item.disabled = !item.selected;
+  });
 };
 
 disableCapacityOption();
 
-const changeCapacityRooms = () => {
+const onCapacityRoomsChange = () => {
   const capacityGuests = roomsGuests[roomNumberInput.value];
 
   capacityOptions.forEach((item) => {
@@ -134,25 +141,25 @@ const changeCapacityRooms = () => {
   });
 };
 
-roomNumberInput.addEventListener('change', changeCapacityRooms);
+roomNumberInput.addEventListener('change', onCapacityRoomsChange);
 
 // «Время заезда» и «Время выезда»
 
-const changeTimeInInpup  = () => {
+const onTimeInInputChange  = () => {
   timeOutInput.value = timeInInpup.value;
 };
 
-const changeTimeOutInpup = () => {
+const onTimeOutInputChange = () => {
   timeInInpup.value = timeOutInput.value;
 };
 
-timeInInpup.addEventListener('change', changeTimeInInpup);
-timeOutInput.addEventListener('change', changeTimeOutInpup);
+timeInInpup.addEventListener('change', onTimeInInputChange);
+timeOutInput.addEventListener('change', onTimeOutInputChange);
 
 // "Выбор адреса на карте"
 
 const changeAddressInput = (coordinates) => {
-  addressInput.value = `${(coordinates.lat).toFixed(5)}, ${(coordinates.lng).toFixed(5)}`;
+  addressInput.value = `${(coordinates.lat).toFixed(DECIMAL_POINT)}, ${(coordinates.lng).toFixed(DECIMAL_POINT)}`;
 };
 
 // "Неактивное состояние" и "Активное состояние"
@@ -176,6 +183,7 @@ const activateAdForm = () => {
 };
 
 //Отправка формы
+
 const getUserFormSubmit = (cb) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -195,6 +203,7 @@ const getUserFormSubmit = (cb) => {
 };
 
 //Reset страницы
+
 const onButtonReset = (cb) => {
   adFormReset.addEventListener('click', (evt) => {
     evt.preventDefault();
@@ -204,4 +213,4 @@ const onButtonReset = (cb) => {
   } );
 };
 
-export {disableState, activateAdForm, changeAddressInput, getUserFormSubmit, adForm, changePriceInput, onButtonReset, avatarPreview, adFormPhoto};
+export {disableState, activateAdForm, changeAddressInput, getUserFormSubmit, adForm, onPriceInputChange, onButtonReset, avatarPreview, adFormPhoto};

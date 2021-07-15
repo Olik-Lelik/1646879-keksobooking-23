@@ -1,23 +1,8 @@
 import {createPinMarker, clearMarker} from './map.js';
 
-const mapFilters = document.querySelector('.map__filters');
-const mapFiltersList = mapFilters.children;
-const housingType = mapFilters.querySelector('#housing-type');
-const housingPrice = mapFilters.querySelector('#housing-price');
-const housingRooms = mapFilters.querySelector('#housing-rooms');
-const housingGuests = mapFilters.querySelector('#housing-guests');
-const housingFeatures = mapFilters.querySelectorAll('.map__checkbox');
-
-const activateFilterForm = () => {
-  mapFilters.classList.remove('map__filters--disabled');
-  for (const elem of mapFiltersList) {
-    elem.removeAttribute('disabled');
-  }
-};
-
 const ANY = 'any';
 
-//const COUNT = 10;
+const COUNT = 10;
 
 const priceMap = {
   'low': {
@@ -32,6 +17,21 @@ const priceMap = {
     start: 50000,
     end: Infinity,
   },
+};
+
+const mapFilters = document.querySelector('.map__filters');
+const mapFiltersList = mapFilters.children;
+const housingType = mapFilters.querySelector('#housing-type');
+const housingPrice = mapFilters.querySelector('#housing-price');
+const housingRooms = mapFilters.querySelector('#housing-rooms');
+const housingGuests = mapFilters.querySelector('#housing-guests');
+const housingFeatures = mapFilters.querySelectorAll('.map__checkbox');
+
+const activateFilterForm = () => {
+  mapFilters.classList.remove('map__filters--disabled');
+  for (const elem of mapFiltersList) {
+    elem.removeAttribute('disabled');
+  }
 };
 
 const filterByType = (ad) =>
@@ -61,14 +61,16 @@ const filterByFeatures = (ad) => Array.from(housingFeatures)
   });
 
 //отфильтрованный массив объявлений
+
 const getFilteredAds = (ads) =>
   ads
     .slice()
     .filter((ad) => (filterByType(ad) && filterByPrice(ad) && filterByRooms(ad) && filterByGuests(ad) && filterByFeatures(ad)))
-    .slice(0, 10)
+    .slice(0, COUNT)
     .forEach((ad) => createPinMarker(ad));
 
 //перерисовка карты
+
 const setFilterChange = (cb) => {
   mapFilters.addEventListener('change', () => {
     clearMarker(),
