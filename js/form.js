@@ -1,6 +1,8 @@
-import {resetPage, clearMarker} from './map.js';
+import {resetPage} from './map.js';
 import {sendData} from './api.js';
-import {mapFilters, mapFiltersList, getFilteredAds} from './filtres.js';
+import {mapFilters, mapFiltersList} from './filtres.js';
+import {getSuccessPopup, getErrorPopup} from './user-modal.js';
+import {getPreview} from './preview.js';
 
 const MIN_LENGTH_TITLE = 30;
 const MAX_LENGTH_TITLE = 100;
@@ -18,6 +20,11 @@ const timeInInpup = adForm.querySelector('#timein');
 const timeOutInput = adForm.querySelector('#timeout');
 const addressInput = adForm.querySelector('#address');
 const adFormReset = adForm.querySelector('.ad-form__reset');
+const adFormAvatar = document.querySelector('.ad-form-header__preview');
+const adFormPhoto = document.querySelector('.ad-form__photo');
+const avatarPreview = adFormAvatar.querySelector('img').cloneNode(true);
+const avatarChooser = adForm.querySelector('#avatar');
+const photoChooser = adForm.querySelector('#images');
 
 const priceHousing = {
   palace: 10000,
@@ -33,6 +40,35 @@ const roomsGuests = {
   3: [1, 2, 3],
   100: [0],
 };
+
+//Фото  аватар
+
+const getAvatar = (result) => {
+  const fragment = document.createDocumentFragment();
+
+  avatarPreview.src = result;
+  fragment.appendChild(avatarPreview);
+  adFormAvatar.innerHTML = '';
+  adFormAvatar.appendChild(fragment);
+};
+
+const getPhoto = (result) => {
+  adFormPhoto.innerHTML = '';
+  const fragment = document.createDocumentFragment();
+  const element = document.createElement('img');
+  element.src = result;
+  element.alt = 'Фото жилья';
+  element.width = '70';
+  element.height = '70';
+  fragment.appendChild(element);
+  adFormPhoto.appendChild(fragment);
+};
+
+const getAvatarPreview = () => getPreview(avatarChooser, getAvatar);
+const getPhotoPreview = () => getPreview(photoChooser, getPhoto);
+
+getAvatarPreview();
+getPhotoPreview();
 
 // "Заголовок объявления"
 
@@ -81,13 +117,7 @@ priceInput.addEventListener('input', () => {
 // «Количество комнат» и «Количество мест»
 
 const disableCapacityOption = () => {
-  capacityOptions.forEach((item) => {
-    if (item.selected) {
-      item.disabled = false;
-    } else {
-      item.disabled = true;
-    }
-  });
+  capacityOptions.forEach((item) => item.disabled = !item.selected);
 };
 
 disableCapacityOption();
@@ -138,37 +168,40 @@ const disableState = () => {
   }
 };
 
-const enableState = () => {
+const activateAdForm = () => {
   adForm.classList.remove('ad-form--disabled');
   for (const elem of adFormList) {
-    elem.removeAttribute('disabled');
-  }
-  mapFilters.classList.remove('map__filters--disabled');
-  for (const elem of mapFiltersList) {
     elem.removeAttribute('disabled');
   }
 };
 
 //Отправка формы
-const getUserFormSubmit = (onSuccess, onError) => {
+const getUserFormSubmit = (cb) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const formData = new FormData(evt.target);
 
-    sendData(onSuccess, onError, resetPage, formData);
+    sendData(
+      () => {
+        getSuccessPopup();
+        resetPage();
+        cb();
+      },
+      getErrorPopup,
+      formData);
+
   });
 };
 
 //Reset страницы
-const onButtonReset = (ads) => {
+const onButtonReset = (cb) => {
   adFormReset.addEventListener('click', (evt) => {
     evt.preventDefault();
 
     resetPage();
-    clearMarker();
-    getFilteredAds(ads);
+    cb();
   } );
 };
 
-export {disableState, enableState, changeAddressInput, getUserFormSubmit, adForm, changePriceInput, onButtonReset};
+export {disableState, activateAdForm, changeAddressInput, getUserFormSubmit, adForm, changePriceInput, onButtonReset, avatarPreview, adFormPhoto};

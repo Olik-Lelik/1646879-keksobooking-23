@@ -1,7 +1,9 @@
-import {enableState, changeAddressInput, adForm, changePriceInput} from './form.js';
+import {activateAdForm, changeAddressInput, adForm, changePriceInput} from './form.js';
 import {renderCardAd} from './card.js';
 import {mapFilters} from './filtres.js';
+import { avatarPreview, adFormPhoto} from './form.js';
 
+const IMG_DEFAULT = 'img/muffin-grey.svg';
 
 const initialPoint = {
   lat: 35.6895,
@@ -15,7 +17,7 @@ const map = L.map('map-canvas');
 const initialMap = () => {
   map
     .on('load', () => {
-      enableState(),
+      activateAdForm(),
       changeAddressInput(initialPoint);
     })
     .setView(initialPoint, SCALE);
@@ -82,12 +84,15 @@ const resetPage = () => {
   mainPinMarker.setLatLng(initialPoint);
   map.setView(initialPoint, SCALE);
   adForm.reset();
+  avatarPreview.src = IMG_DEFAULT;
+  adFormPhoto.innerHTML = '';
   const adFormInputs = adForm.querySelectorAll('input');
   adFormInputs.forEach((input) => input.style.borderColor = '');
   const resetMainPinMarker = mainPinMarker.getLatLng();
   changeAddressInput(resetMainPinMarker);
   changePriceInput();
   mapFilters.reset();
+  clearMarker();
 };
 
 export {initialMap, createPinMarker, mainMarkerLatLng, resetPage, clearMarker};

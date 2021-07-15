@@ -1,9 +1,9 @@
 import {getUserFormSubmit, onButtonReset, disableState} from './form.js';
 import {initialMap, mainMarkerLatLng} from './map.js';
 import {getData} from './api.js';
-import {getSuccessPopup, getErrorPopup} from './user-modal.js';
-import {setFilterChange, getFilteredAds} from './filtres.js';
+import {setFilterChange, getFilteredAds, activateFilterForm} from './filtres.js';
 import {debounce} from './utils/debounce.js';
+import './preview.js';
 
 
 disableState();
@@ -14,7 +14,7 @@ mainMarkerLatLng();
 getData((cards) => {
   getFilteredAds(cards),
   setFilterChange(debounce(() => getFilteredAds(cards)));
-  onButtonReset(cards);
+  activateFilterForm();
+  getUserFormSubmit(() => getFilteredAds(cards));
+  onButtonReset(() => getFilteredAds(cards));
 });
-
-getUserFormSubmit(getSuccessPopup, getErrorPopup);
