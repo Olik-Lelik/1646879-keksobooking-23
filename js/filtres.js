@@ -8,6 +8,13 @@ const housingRooms = mapFilters.querySelector('#housing-rooms');
 const housingGuests = mapFilters.querySelector('#housing-guests');
 const housingFeatures = mapFilters.querySelectorAll('.map__checkbox');
 
+const activateFilterForm = () => {
+  mapFilters.classList.remove('map__filters--disabled');
+  for (const elem of mapFiltersList) {
+    elem.removeAttribute('disabled');
+  }
+};
+
 const ANY = 'any';
 
 //const COUNT = 10;
@@ -69,4 +76,4 @@ const setFilterChange = (cb) => {
   });
 };
 
-export {mapFilters, mapFiltersList, setFilterChange, getFilteredAds};
+export {mapFilters, mapFiltersList, activateFilterForm, setFilterChange, getFilteredAds};
